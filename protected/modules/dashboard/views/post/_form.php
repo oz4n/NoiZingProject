@@ -77,8 +77,6 @@
         </div>
 
 
-
-
         <div class="box pages">
             <div class="box-header">
                 <span class="title">Post Options</span>
