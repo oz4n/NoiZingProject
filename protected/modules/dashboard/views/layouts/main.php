@@ -45,6 +45,6 @@
             echo $content;
             ?>
         </div>
-        <?php // $this->renderPartial("/layouts/footer"); ?>        
+        <?php  $this->renderPartial("/layouts/footer"); ?>
     </body>
 </html>
