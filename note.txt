@@ -1,2 +1,5 @@
+System
+    1. Hapus tabel tag dan table term akan di pungsikan sebagai tag
+
 Post
-    1 .
+    1 .Menampilkan Tag pada interfaces post (create,update)
