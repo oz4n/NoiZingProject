@@ -12,7 +12,7 @@
             'enableAjaxValidation' => true,
         ));
         echo $form->textField($post, 'title', array('size' => 60, 'maxlength' => 128, 'class' => 'span12', 'placeholder' => 'Title...'));
-        Yii::import('ext.imperavi-redactor.ImperaviRedactorWidget');
+        Yii::import('ext.imperavi-redactor-widget-master.ImperaviRedactorWidget');
 
         $this->widget('ImperaviRedactorWidget', array(
             'model' => $post,
