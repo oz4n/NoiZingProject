@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /framework/
+Allow: /protected/views/
+Allow: /protected/pront/views/

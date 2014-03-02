@@ -1,0 +1,19 @@
+RewriteEngine on
+#Security
+RewriteCond %{HTTP_USER_AGENT} libwww [NC,OR]
+RewriteCond %{QUERY_STRING} ^(.*)=http [NC]
+RewriteRule ^(.*)$ - [F,L]
+ 
+# if a directory or a file exists, use it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+ 
+# otherwise forward it to index.php
+RewriteRule . index.php
+ 
+# if url example.com
+RewriteCond %{HTTP_HOST} ^aps-lombok.com$
+RewriteRule (.*) http://www.aps-lombok.com/$1 [R=301]
+ 
+
+

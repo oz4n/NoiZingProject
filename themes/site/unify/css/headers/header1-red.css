@@ -1,0 +1,69 @@
+/*Menu
+------------------------------------*/
+.collapse.in li a:hover,
+.collapse.in li a.dropdown-toggle { 
+    border-bottom:solid 1px #ed0000 !important;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+    color:#ed0000;
+    border-bottom:solid 2px #ed0000;
+}
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:focus {
+    color:#ed0000;	
+    border-bottom:solid 2px #ed0000;
+}
+
+.navbar .nav > .active > a:hover {	
+    color:#ed0000;	
+    border-bottom:solid 2px #ed0000;
+}
+
+/*Arrow for menu*/
+.navbar .nav > li > a .caret {
+    border-top-color: #ed0000!important;	
+    border-bottom-color: #ed0000 !important;
+}
+
+/*Dropdown Menu*/
+.dropdown-menu { 
+    border-top:solid 2px #ed0000; 
+}
+
+.navbar .btn-navbar {
+    background:#ed0000;
+}
+.navbar .btn-navbar:hover {
+    background:#2980b9;
+}
+.navbar .nav > li > .dropdown-menu:after {
+    border-top-color: #ed0000 !important;
+    border-bottom-color: #ed0000 !important;
+}
+
+/*Serach*/
+.navbar .nav > li > a.search:hover {
+    color:#ed0000;
+    border-bottom-color:#ed0000;
+}
+
+.dropdown-menu{
+    border-bottom: solid 2px #056DFF !important;
+}
+
+.dropdown-menu li > a:hover, 
+.dropdown-menu li > a:focus, 
+.dropdown-submenu:hover > a,
+.dropdown-submenu li > a:focus{
+    color: #ffffff;
+    background: #ed0000 !important;  
+}
+
+.navbar .nav li.dropdown.open>.dropdown-toggle, .navbar .nav li.dropdown.active>.dropdown-toggle, .navbar .nav li.dropdown.open.active>.dropdown-toggle {
+    color: #ed0000 !important;
+    background-color: #ffffff !important;
+}
+
+

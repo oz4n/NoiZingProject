@@ -1,0 +1,201 @@
+/*
+ * SmartMap - Working Multi-Page Landing Page - V.1.0
+ * Author: Shy Design
+ * Author URL: http://wrapbootstrap.com/user/shydesign
+ * All Right Reserved
+ * Credits:
+ * * http://twitter.github.com/bootstrap/
+ * * http://fortawesome.github.com/Font-Awesome/
+ * * http://tympanus.net/codrops/?p=14941
+ *
+ */
+.items * { 
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box; 
+}
+
+.items {
+    margin-left: -27px;
+    padding: 0;
+    list-style: none;
+    position: relative;
+} 
+.header-time{
+    font-size: 15px;
+    font-weight: bold;
+    color: #555555;
+}
+/* The line */
+.items:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: #585f69;
+    left: 20%;
+    margin-left: -10px;
+}
+
+.items > li {
+    position: relative;
+}
+
+/* The date/time */
+.items > li .cbp_tmtime {
+    display: block;
+    width: 25%;
+    padding-right: 100px;
+    position: absolute;
+}
+
+.items > li .cbp_tmtime span {
+    display: block;
+    text-align: right;
+}
+
+.items > li .cbp_tmtime span:first-child {
+    font-size: 0.9em;
+    color: #555555;
+}
+
+.items > li .cbp_tmtime span:last-child {
+    font-size: 2.9em;
+    color: #555555;
+}
+
+.items > li:nth-child(odd) .cbp_tmtime span:last-child {
+    color: #555555;
+}
+
+/* Right content */
+.items > li .cbp_tmlabel {
+    margin: 0 0 15px 25%;
+    background: #f7f7f7;
+    color: #fff;
+    padding: 2em;  
+    font-weight: 300;
+    line-height: 1.4;
+    position: relative;
+    border-radius: 5px;
+}
+
+.items > li:nth-child(odd) .cbp_tmlabel {
+    background: #f5f5f5;
+}
+
+.items > li .cbp_tmlabel h2 { 
+    margin-top: 0px;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+
+/* The triangle */
+.items > li .cbp_tmlabel:after {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-right-color: #f7f7f7;
+    border-width: 10px;
+    top: 10px;
+}
+
+.items > li:nth-child(odd) .cbp_tmlabel:after {
+    border-right-color: #f5f5f5;
+}
+
+/* The icons */
+.items > li .cbp_tmicon {
+    width: 40px;
+    height: 40px;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    font-size: 1.4em;
+    /*line-height: 40px;*/
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    color: #fff;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 8px #585f69;
+    text-align: center;
+    left: 20%;
+    top: 0;
+    margin: 0 0 0 -25px;
+}
+
+.cbp_tmicon-phone:before {
+    content: "\e000";
+}
+
+.cbp_tmicon-screen:before {
+    content: "\e001";
+}
+
+.cbp_tmicon-mail:before {
+    content: "\e002";
+}
+
+.cbp_tmicon-earth:before {
+    content: "\e003";
+}
+
+/* Example Media Queries */
+@media screen and (max-width: 65.375em) {
+
+    .items > li .cbp_tmtime span:last-child {
+        font-size: 1.5em;
+    }
+}
+
+@media screen and (max-width: 47.2em) {
+    .items:before {
+        display: none;
+    }
+
+    .items > li .cbp_tmtime {
+        width: 100%;
+        position: relative;
+        padding: 0 0 20px 0;
+    }
+
+    .items > li .cbp_tmtime span {
+        text-align: left;
+    }
+
+    .items > li .cbp_tmlabel {
+        margin: 0 0 30px 0;
+        padding: 1em;
+        font-weight: 400;
+        font-size: 95%;
+    }
+
+    .items > li .cbp_tmlabel:after {
+        right: auto;
+        left: 20px;
+        border-right-color: transparent;
+        border-bottom-color: #f7f7f7;
+        top: -20px;
+    }
+
+    .items > li:nth-child(odd) .cbp_tmlabel:after {
+        border-right-color: transparent;
+        border-bottom-color: #f5f5f5;
+    }
+
+    .items > li .cbp_tmicon {
+        position: relative;
+        float: right;
+        left: auto;
+        margin: -55px 5px 0 0px;
+    }	
+}
+

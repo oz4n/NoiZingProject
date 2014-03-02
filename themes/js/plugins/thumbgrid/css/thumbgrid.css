@@ -1,0 +1,295 @@
+.vignette {
+    line-height: 0;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+    /*z-index: -1*/
+
+}
+
+.icon-action{
+    position: absolute;
+}
+
+
+.icon-action > .iaction {
+    margin-top: -35px;
+}
+
+.icon-action > .iaction > a.iaction-remove{
+    cursor: pointer; 
+    position: absolute; 
+    margin-left: 53px;
+    background-color:#b94a48; 
+    opacity:.55; 
+    border: 3px solid #fff; 
+    width: 20px; 
+    height: 20px; 
+    border-radius: 100px;
+    -moz-border-radius: 100px;
+    -webkit-border-radius: 100px;
+}
+
+
+.icon-action > .iaction > .iaction-remove > i.i-remove{
+    color: #fff; 
+    opacity: 10; 
+    font-weight: bolder; 
+    margin-top: 4px; 
+    margin-left: -1px;
+}
+
+
+.icon-action > .iaction > a.iaction-edit{
+    cursor: pointer; 
+    position: absolute; 
+    margin-left: 23px;
+    background-color:#468847; 
+    opacity:.55; 
+    border: 3px solid #fff; 
+    width: 20px; 
+    height: 20px; 
+    border-radius: 100px;
+    -moz-border-radius: 100px;
+    -webkit-border-radius: 100px;
+}
+
+.icon-action > .iaction > .iaction-edit > i.i-edit{
+    color: #fff; 
+    opacity: 10; 
+    font-weight: bolder; 
+    margin-top: 4px; 
+    margin-left: 1px;
+}
+
+.icon-action > .iaction > a.iaction-ok{
+    cursor: pointer; 
+    position: absolute; 
+    margin-left: -94px;    
+    background-color:#427fed; 
+    opacity:.55; 
+    border: 3px solid #fff; 
+    width: 20px; 
+    height: 20px; 
+    border-radius: 100px;
+    -moz-border-radius: 100px;
+    -webkit-border-radius: 100px;
+}
+
+.icon-action > .iaction > .iaction-ok > i.i-ok{
+    color: #fff; 
+    opacity: 10; 
+    font-weight: bolder; 
+    margin-top: 4px; 
+    margin-left: 1px;
+}
+
+.og-fullimg img {
+    position: relative;        
+    background-color: #fff;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+}
+.og-grid {
+    list-style: none;
+    /*padding: 20px 0;*/
+    /*margin: 0 auto;*/
+    text-align: center;
+    /*width: 1170px;*/
+}
+div.og-fullimg {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 70px;
+    margin: 0;
+}
+
+.og-grid div.og-child {
+    display: inline-block;
+    margin: 0 0 -45px 5.5px;
+    vertical-align: top;
+    height: 180px;
+}
+
+.og-grid div.og-child > a,
+.og-grid div.og-child > a img {
+    border: none;
+    outline: none;
+    display: block;
+    position: relative;
+}
+.og-grid div.og-child > a img {
+
+    /*padding: 4px;*/
+    background-color: #fff;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+}
+.og-grid div.og-child.og-expanded > a::after {
+    top: auto;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-bottom-color: #f8f8f8;
+    border-width: 12px;
+    left: 50%;
+    margin: -14px 0 0 -15px;
+}
+
+.og-expander {
+    position: absolute;
+    background: #f8f8f8;
+    top: auto;
+    left: 0;
+    width: 100%;
+    margin-top: 10px;
+    text-align: left;
+    height: 0;
+    overflow: hidden;
+
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.og-expander-inner {
+    /*padding: 50px 30px;*/
+    height: 100%;
+}
+
+.og-close {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.og-close::before,
+.og-close::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    height: 1px;
+    background: #888;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.og-close::after {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.og-close:hover::before,
+.og-close:hover::after {
+    background: #333;
+}
+
+.og-fullimg,
+.og-details {
+    width: 50%;
+    float: left;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.og-details {
+    padding: 30px 0px 0 0px;
+}
+
+.og-fullimg {
+    text-align: center;
+}
+
+.og-fullimg img {
+    display: inline-block;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.og-details h3 {
+    font-weight: 300;
+    font-size: 52px;
+    padding: 40px 0 10px;
+    margin-bottom: 10px;
+}
+
+.og-details p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: #999;
+}
+
+
+
+.og-loading {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FF0000;
+    box-shadow: 0 0 1px #F00, 15px 30px 1px #FFD600, -15px 30px 1px #00A00D;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -25px;
+    -webkit-animation: loader 0.5s infinite ease-in-out both;
+    -moz-animation: loader 0.5s infinite ease-in-out both;
+    animation: loader 0.5s infinite ease-in-out both;
+}
+
+@-webkit-keyframes loader {
+    0% { background: #ddd; }
+33% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ccc, -15px 30px 1px #ddd; }
+66% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ddd, -15px 30px 1px #ccc; }
+}
+
+@-moz-keyframes loader {
+    0% { background: #ddd; }
+33% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ccc, -15px 30px 1px #ddd; }
+66% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ddd, -15px 30px 1px #ccc; }
+}
+
+@keyframes loader {
+    0% { background: #ddd; }
+33% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ccc, -15px 30px 1px #ddd; }
+66% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ddd, -15px 30px 1px #ccc; }
+}
+
+@media screen and (max-width: 830px) {
+
+    .og-expander h3 { font-size: 32px; }
+    .og-expander p { font-size: 13px; }
+    .og-expander a { font-size: 12px; }
+
+}
+
+@media screen and (max-width: 650px) {
+
+    .og-fullimg { display: none; }
+    .og-details { float: none; width: 100%; }
+
+}
