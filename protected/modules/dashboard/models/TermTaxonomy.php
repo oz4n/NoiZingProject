@@ -17,7 +17,8 @@
  * @property Post[] $posts
  * @property Term $term
  */
-class TermTaxonomy extends CActiveRecord {
+class TermTaxonomy extends CActiveRecord
+{
 
     public static $_items = array();
     public static $_list = array(0 => 'None');
@@ -28,21 +29,24 @@ class TermTaxonomy extends CActiveRecord {
      * @param string $className active record class name.
      * @return TermTaxonomy the static model class
      */
-    public static function model($className = __CLASS__) {
+    public static function model($className = __CLASS__)
+    {
         return parent::model($className);
     }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public function tableName()
+    {
         return $this->_table;
     }
 
     /**
      * @return array validation rules for model attributes.
      */
-    public function rules() {
+    public function rules()
+    {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
@@ -61,7 +65,8 @@ class TermTaxonomy extends CActiveRecord {
     /**
      * @return array relational rules.
      */
-    public function relations() {
+    public function relations()
+    {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
 
@@ -78,7 +83,8 @@ class TermTaxonomy extends CActiveRecord {
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return array(
             'id' => 'ID',
             'type' => 'Type',
@@ -87,7 +93,7 @@ class TermTaxonomy extends CActiveRecord {
             'status' => 'Status',
             'parent' => 'Parent',
             'term_id' => 'Term',
-            
+
             'term[name]' => 'Name',
             'term[slug]' => 'Slug',
         );
@@ -97,7 +103,8 @@ class TermTaxonomy extends CActiveRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function searchCategory() {
+    public function searchCategory()
+    {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
@@ -120,21 +127,22 @@ class TermTaxonomy extends CActiveRecord {
             ),
         ));
     }
-    
-    
 
-    public function beforeDelete() {        
+
+    public function beforeDelete()
+    {
 //        $model = self::model()->findAll('parent='.$this->id);
 //       
 //            $model->parent = 0;
 //            $model->save();
-      
+
         Relationships::model()->deleteAll('term_taxonomy_id=' . $this->id);
         return parent::beforeDelete();
     }
 
 
-    public function categoryDataStore() {
+    public function categoryDataStore()
+    {
         $data = array(
             'id' => 'navigasi-grid',
             'type' => 'bordered',
@@ -181,28 +189,49 @@ class TermTaxonomy extends CActiveRecord {
 //        return $data;
 //    }
 
-    public static function loadCategorys($status) {
+    public static function loadMenus($status)
+    {
+        $_list = array();
         $type = 'name';
         if (!isset(self::$_items[$type]))
-            self::loadCategorysItems($type,$status);
-        return CMap::mergeArray(self::$_list, self::$_items[$type]);
+            self::loadMenusItems($type, $status);
+        return CMap::mergeArray($_list, self::$_items[$type]);
     }
 
-    private static function loadCategorysItems($type,$status) {
+    private static function loadMenusItems($type, $status)
+    {
         self::$_items[$type] = array();
-        $models = self::model()->findAll("type='".$status."'");
+        $models = self::model()->findAll("type='" . $status . "'");
         foreach ($models as $model)
             self::$_items[$type][$model->id] = ucwords($model->term->name);
     }
-    
-    public static function loadPageCategorys() {
-        $type = 'name';       
+
+    public static function loadCategorys($status)
+    {
+        $type = 'name';
+        if (!isset(self::$_items[$type]))
+            self::loadCategorysItems($type, $status);
+        return CMap::mergeArray(self::$_list, self::$_items[$type]);
+    }
+
+    private static function loadCategorysItems($type, $status)
+    {
+        self::$_items[$type] = array();
+        $models = self::model()->findAll("type='" . $status . "'");
+        foreach ($models as $model)
+            self::$_items[$type][$model->id] = ucwords($model->term->name);
+    }
+
+    public static function loadPageCategorys()
+    {
+        $type = 'name';
         if (!isset(self::$_items[$type]))
             self::loadPageCategorysItems($type);
         return CMap::mergeArray(self::$_list, self::$_items[$type]);
     }
 
-    private static function loadPageCategorysItems($type) {
+    private static function loadPageCategorysItems($type)
+    {
         self::$_items[$type] = array();
         $models = self::model()->findAll("type='pages'");
         foreach ($models as $model)

@@ -16,3 +16,7 @@ Post
     6. Perbaikan integrasi redactor.js dengan post
     7. Sorter data berdasarkan tanggal, published, draft, categories
     8. fitur pencarian
+
+Menu
+====
+    1. Menampilkan menu berdasarkan jumlah posisi menu yang ada pada tampilan depan

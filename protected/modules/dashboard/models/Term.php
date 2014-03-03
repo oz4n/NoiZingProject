@@ -145,6 +145,39 @@ class Term extends CActiveRecord {
         ));
     }
 
+
+    public function menuSearch() {
+        $criteria = new CDbCriteria;
+        $criteria->compare('id', $this->id);
+        $criteria->compare('name', $this->name, true);
+        $criteria->compare('slug', $this->slug, true);
+
+        $criteria->with = array('termTaxonomies' => array('select' => 'termTaxonomies AS te te.type, te.parent, te.count, te.status, ts.term_id', 'together' => true));
+        $criteria->condition = 'type="nav_menu"';
+        $criteria->compare('parent', $this->parent, true);
+
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'sort' => array(
+                'attributes' => array(
+                    'name' => array(
+                        'asc' => 'name',
+                        'desc' => 'name DESC'
+                    ),
+                    'slug' => array(
+                        'asc' => 'slug',
+                        'desc' => 'slug DESC',
+                    ),
+                    'parent' => array(
+                        'asc' => 'parent',
+                        'desc' => 'parent DESC',
+                    )
+                ),
+            ),
+        ));
+    }
+
     public function postCategorySearch() {
         $criteria = new CDbCriteria;
         $criteria->compare('id', $this->id);
@@ -256,6 +289,12 @@ class Term extends CActiveRecord {
         return "<span class='c-name'>" . $this->name . "</span>" . " (" . $this->termTaxonomies[0]->count . ") is " . $status . "<br>" . $action;
     }
 
+    public function __getMenuAttr() {
+        $status = Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) == "Draft" ? "<span style=\"color:red\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>" : "<span style=\"color:#83b245\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>";
+        $action = CHtml::link('Edit', array('menu/select', 'id' => $this->termTaxonomies[0]->id)) . ' | <span id="' . $this->id . '" name="' . $this->name . '" slug="' . $this->slug . '" parent="' . $this->termTaxonomies[0]->parent . '" status="' . $this->termTaxonomies[0]->status . '" class="cat-confirm cat-quick-edit">Quick Edit</span>' . " | <span  class='cat-confirm delete-box id-" . $this->id . "'>Delete</span>";
+        return "<span class='c-name'>" . $this->name . "</span>" . " (" . $this->termTaxonomies[0]->count . ") is " . $status . "<br>" . $action;
+    }
+
     public function dataPostCategoryStore() {
         $data = array(
             'id' => 'category-grid',
@@ -276,6 +315,32 @@ class Term extends CActiveRecord {
                     'name' => 'parent',
                     'header' => 'Parent',
                     'value' => '$data->termTaxonomies[0]->parent == 0 ? "-" : $data->findTermTaxonomyNameByid($data->termTaxonomies[0]->parent)'
+                ),
+                array(
+                    'name' => 'slug',
+                    'type' => 'html',
+                    'value' => '$data->slug'
+                ),
+            ),
+        );
+        return $data;
+    }
+
+    public function dataMenuStore() {
+        $data = array(
+            'id' => 'category-grid',
+            'type' => 'bordered',
+            'dataProvider' => $this->menuSearch(),
+            'template' => "{items}{pager}",
+            'ajaxUpdate' => true,
+            'selectableRows' => 2,
+            'htmlOptions' => array('class' => 'table-highlight '),
+            'columns' => array(
+                array(
+                    'name' => 'name',
+                    'header' => 'Name',
+                    'type' => 'raw',
+                    'value' => '$data->__getMenuAttr()'
                 ),
                 array(
                     'name' => 'slug',
