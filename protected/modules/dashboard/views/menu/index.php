@@ -20,15 +20,15 @@ $this->breadcrumbs = array(
                 <div class="box" style="padding: 10px">
                     <?php
                     $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-                        'id' => 'category-form',
-                        'action' => Yii::app()->createUrl('/dashboard/category/create'),
+                        'id' => 'menu-form',
+                        'action' => Yii::app()->createUrl('/dashboard/menu/create'),
                         'type' => 'vertical',
                         'enableAjaxValidation' => true,
                         'htmlOptions' => array()
                     ));
 
                     $this->widget('ext.ajaxform.JAjaxForm', array(
-                        'formId' => 'category-form',
+                        'formId' => 'menu-form',
                         'options' => array(
                             'dataType' => 'json',
                             'beforeSubmit' => 'js:function(formData,$form,options) { $("#action-loading").button("loading"); }',
@@ -45,7 +45,7 @@ $this->breadcrumbs = array(
 
                     <div class="control-group">
                         <div class="controls">
-                            <?php echo $form->dropDownListRow($navmenu, 'status', Lookup::items("CategoryStatus"), array('class' => 'span6')); ?>
+                            <?php echo $form->dropDownListRow($navmenu, 'status', Lookup::items("TaxStatus"), array('class' => 'span6')); ?>
                             <span class="help-block">The "status" is a property that is used to validate the category for publications.</span>
                         </div>
                     </div>

@@ -50,7 +50,7 @@ $this->breadcrumbs = array(
                     </div>
                     <div class="control-group">
                         <div class="controls">
-                            <?php echo $form->dropDownListRow($category, 'status', Lookup::items("CategoryStatus"), array('class' => 'span6')); ?>
+                            <?php echo $form->dropDownListRow($category, 'status', Lookup::items("TaxStatus"), array('class' => 'span6')); ?>
                             <span class="help-block">The "status" is a property that is used to validate the category for publications.</span>
                         </div>
                     </div>

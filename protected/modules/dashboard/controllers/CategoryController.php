@@ -48,15 +48,43 @@ class CategoryController extends AdminController
         );
     }
 
+    public function actionIndex()
+    {
+        $this->initJsIndexGeneret();
+        $model = new Term();
+        $model->unsetAttributes();
+        if (isset($_GET['Term']))
+            $model->attributes = $_GET['Term'];
+
+        $this->render('index', array(
+            'category' => $model,
+        ));
+    }
+
     public function actionCreate()
     {
-        $category = new Term;
-        $this->performAjaxValidation($category);
+        $model = new Term();
+        $this->performAjaxValidation($model);
         if (isset($_POST['Term'])) {
-            $category->attributes = $_POST['Term'];
-            $category->termTaxonomies = array(array('type' => 'category', 'parent' => $_POST['Term']['parent'], 'description' => $_POST['Term']['description'], 'status' => $_POST['Term']['status']));
-            if ($category->saveWithRelated('termTaxonomies')) {
-                echo CJSON::encode(array_merge(Yii::app()->CInfo->getTrue_save_info(), array('id' => $category->termTaxonomies[0]->id, 'name' => ucwords($category->name))));
+            $model->attributes = $_POST['Term'];
+            $model->termTaxonomies = array(
+                array(
+                    'type' => 'category',
+                    'parent' => $_POST['Term']['parent'],
+                    'description' => $_POST['Term']['description'],
+                    'status' => $_POST['Term']['status']
+                )
+            );
+            if ($model->saveWithRelated('termTaxonomies')) {
+                echo CJSON::encode(
+                    array_merge(
+                        Yii::app()->CInfo->getTrue_save_info(),
+                        array(
+                            'id' => $model->termTaxonomies[0]->id,
+                            'name' => ucwords($model->name)
+                        )
+                    )
+                );
                 exit();
             } else {
                 echo CJSON::encode(Yii::app()->CInfo->getFalse_save_info());
@@ -92,26 +120,12 @@ class CategoryController extends AdminController
 
     public function actionDelete()
     {
-        if (isset($_POST)) {
+        if (isset($_POST['id'])) {
             $cat_id = $this->loadModel($_POST['id'])->termTaxonomies[0]->id;
             $this->loadModel($_POST['id'])->delete();
             echo CJSON::encode(array_merge(Yii::app()->CInfo->getTrue_delete_info(), array('cat_id' => $cat_id)));
         } else
             throw new CHttpException(404, 'The requested pages does not exist.');
-    }
-
-
-    public function actionIndex()
-    {
-        $this->initJsIndexGeneret();
-        $category = new Term;
-        $category->unsetAttributes();
-        if (isset($_GET['Term']))
-            $category->attributes = $_GET['Term'];
-
-        $this->render('index', array(
-            'category' => $category,
-        ));
     }
 
 

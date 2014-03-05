@@ -4,6 +4,16 @@ System
     2. Merapikan coding dan perubahan alur kerja pada semua fitur.
     3. Testing pada setiap fitur
 
+Cara-cara testing project
+=========================
+### Controller
+    1. uji coba secara klik tombol button
+    2. uji coba secara ajax request
+    3. uji coba contoller / link secara manual dengan mengkopi paste action (url) pada browser
+    4. validasi form aksi
+
+### Model
+    1. dalam satu model berapa controller yang mengunakan
 Post
 ====
     1. Menampilkan Tag pada interfaces post (create,update)
@@ -19,4 +29,5 @@ Post
 
 Menu
 ====
-    1. Menampilkan menu berdasarkan jumlah posisi menu yang ada pada tampilan depan
+    1. Menampilkan menu berdasarkan jumlah posisi menu yang ada pada tampilan depan (page,footer, sidebar)
+    2. mebuat crud untuk menu

@@ -11,7 +11,8 @@
  * The followings are the available model relations:
  * @property TermTaxonomy[] $termTaxonomies
  */
-class Term extends CActiveRecord {
+class Term extends CActiveRecord
+{
 
     private $_table = 'term';
     public $parent;
@@ -23,18 +24,21 @@ class Term extends CActiveRecord {
      * @param string $className active record class name.
      * @return Term the static model class
      */
-    public static function model($className = __CLASS__) {
+    public static function model($className = __CLASS__)
+    {
         return parent::model($className);
     }
 
     /**
      * @return string the associated database table name
      */
-    public function tableName() {
+    public function tableName()
+    {
         return $this->_table;
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return array(
             'ESaveRelatedBehavior' => array('class' => 'dashboard.components.behaviors.ESaveRelatedBehavior'),
             'sluggable' => array(
@@ -49,10 +53,11 @@ class Term extends CActiveRecord {
     /**
      * @return array validation rules for model attributes.
      */
-    public function rules() {
+    public function rules()
+    {
         return array(
             array('name', 'length', 'max' => 45),
-            array('name, parent, status', 'required'),
+            array('name, status', 'required'),
             array('description', 'length', 'max' => 255),
             array('id, name, slug, parent, status, description', 'safe', 'on' => 'search'),
         );
@@ -61,7 +66,8 @@ class Term extends CActiveRecord {
     /**
      * @return array relational rules.
      */
-    public function relations() {
+    public function relations()
+    {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
@@ -72,7 +78,8 @@ class Term extends CActiveRecord {
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return array(
             'id' => 'ID',
             'name' => 'Name',
@@ -83,7 +90,8 @@ class Term extends CActiveRecord {
         );
     }
 
-    public function beforeDelete() {
+    public function beforeDelete()
+    {
         parent::beforeDelete();
         $model = TermTaxonomy::model()->findAll('parent=' . $this->termTaxonomies[0]->id);
         foreach ($model as $v) {
@@ -94,7 +102,8 @@ class Term extends CActiveRecord {
         return true;
     }
 
-    public function afterDelete() {
+    public function afterDelete()
+    {
         parent::afterDelete();
         $model = NavMenu::model()->find("term_id=" . $this->id);
 
@@ -113,7 +122,8 @@ class Term extends CActiveRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function categorySearch() {
+    public function categorySearch()
+    {
         $criteria = new CDbCriteria;
         $criteria->compare('id', $this->id);
         $criteria->compare('name', $this->name, true);
@@ -146,7 +156,8 @@ class Term extends CActiveRecord {
     }
 
 
-    public function menuSearch() {
+    public function menuSearch()
+    {
         $criteria = new CDbCriteria;
         $criteria->compare('id', $this->id);
         $criteria->compare('name', $this->name, true);
@@ -178,7 +189,8 @@ class Term extends CActiveRecord {
         ));
     }
 
-    public function postCategorySearch() {
+    public function postCategorySearch()
+    {
         $criteria = new CDbCriteria;
         $criteria->compare('id', $this->id);
         $criteria->compare('name', $this->name, true);
@@ -214,7 +226,8 @@ class Term extends CActiveRecord {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function pageCategorySearch() {
+    public function pageCategorySearch()
+    {
         $criteria = new CDbCriteria;
         $criteria->compare('id', $this->id);
         $criteria->compare('name', $this->name, true);
@@ -246,13 +259,15 @@ class Term extends CActiveRecord {
         ));
     }
 
-    public function __getCatAttr() {
+    public function __getCatAttr()
+    {
         $status = Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) == "Draft" ? "<span style=\"color:red\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>" : "<span style=\"color:#83b245\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>";
         $action = CHtml::link('Edit', array('category/update', 'id' => $this->id)) . ' | <span id="' . $this->id . '" name="' . $this->name . '" slug="' . $this->slug . '" parent="' . $this->termTaxonomies[0]->parent . '" status="' . $this->termTaxonomies[0]->status . '" class="cat-confirm cat-quick-edit">Quick Edit</span>' . " | <span  class='cat-confirm delete-box id-" . $this->id . "'>Delete</span>";
         return "<span class='c-name'>" . $this->name . "</span>" . " (" . $this->termTaxonomies[0]->count . ") is " . $status . "<br>" . $action;
     }
 
-    public function dataCategoryStore() {
+    public function dataCategoryStore()
+    {
         $data = array(
             'id' => 'category-grid',
             'type' => 'bordered',
@@ -283,19 +298,25 @@ class Term extends CActiveRecord {
         return $data;
     }
 
-    public function __getPostCatAttr() {
-        $status = Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) == "Draft" ? "<span style=\"color:red\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>" : "<span style=\"color:#83b245\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>";
+    public function __getPostCatAttr()
+    {
+        $status = Lookup::item("TaxStatus", $this->termTaxonomies[0]->status) == "Draft" ? "<span style=\"color:red\">" . Lookup::item("TaxStatus", $this->termTaxonomies[0]->status) . "</span>" : "<span style=\"color:#83b245\">" . Lookup::item("TaxStatus", $this->termTaxonomies[0]->status) . "</span>";
         $action = CHtml::link('Edit', array('postcategory/update', 'id' => $this->id)) . ' | <span id="' . $this->id . '" name="' . $this->name . '" slug="' . $this->slug . '" parent="' . $this->termTaxonomies[0]->parent . '" status="' . $this->termTaxonomies[0]->status . '" class="cat-confirm cat-quick-edit">Quick Edit</span>' . " | <span  class='cat-confirm delete-box id-" . $this->id . "'>Delete</span>";
         return "<span class='c-name'>" . $this->name . "</span>" . " (" . $this->termTaxonomies[0]->count . ") is " . $status . "<br>" . $action;
     }
 
-    public function __getMenuAttr() {
-        $status = Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) == "Draft" ? "<span style=\"color:red\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>" : "<span style=\"color:#83b245\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>";
-        $action = CHtml::link('Edit', array('menu/select', 'id' => $this->termTaxonomies[0]->id)) . ' | <span id="' . $this->id . '" name="' . $this->name . '" slug="' . $this->slug . '" parent="' . $this->termTaxonomies[0]->parent . '" status="' . $this->termTaxonomies[0]->status . '" class="cat-confirm cat-quick-edit">Quick Edit</span>' . " | <span  class='cat-confirm delete-box id-" . $this->id . "'>Delete</span>";
+    public function __getMenuAttr()
+    {
+        $status = Lookup::item("TaxStatus", $this->termTaxonomies[0]->status) == "Draft" ? "<span style=\"color:red\">" . Lookup::item("TaxStatus", $this->termTaxonomies[0]->status) . "</span>" : "<span style=\"color:#83b245\">" . Lookup::item("TaxStatus", $this->termTaxonomies[0]->status) . "</span>";
+        $edit = CHtml::link('Edit', array('menu/select', 'id' => $this->termTaxonomies[0]->id));
+        $qedit = '<span id="' . $this->id . '" name="' . $this->name . '" slug="' . $this->slug . '" parent="' . $this->termTaxonomies[0]->parent . '" status="' . $this->termTaxonomies[0]->status . '" class="cat-confirm cat-quick-edit">Quick Edit</span>';
+        $delete = CHtml::link('Delete','javascrift:;',array('class'=>'cat-confirm delete-box','data-id'=>$this->id));
+        $action = $edit . ' | ' . $qedit . ' | ' . $delete;
         return "<span class='c-name'>" . $this->name . "</span>" . " (" . $this->termTaxonomies[0]->count . ") is " . $status . "<br>" . $action;
     }
 
-    public function dataPostCategoryStore() {
+    public function dataPostCategoryStore()
+    {
         $data = array(
             'id' => 'category-grid',
             'type' => 'bordered',
@@ -326,7 +347,8 @@ class Term extends CActiveRecord {
         return $data;
     }
 
-    public function dataMenuStore() {
+    public function dataMenuStore()
+    {
         $data = array(
             'id' => 'category-grid',
             'type' => 'bordered',
@@ -352,13 +374,15 @@ class Term extends CActiveRecord {
         return $data;
     }
 
-    public function __getPageCatAttr() {
+    public function __getPageCatAttr()
+    {
         $status = Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) == "Draft" ? "<span style=\"color:red\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>" : "<span style=\"color:#83b245\">" . Lookup::item("CategoryStatus", $this->termTaxonomies[0]->status) . "</span>";
         $action = CHtml::link('Edit', array('pagecategory/update', 'id' => $this->id)) . ' | <span id="' . $this->id . '" name="' . $this->name . '" slug="' . $this->slug . '" parent="' . $this->termTaxonomies[0]->parent . '" status="' . $this->termTaxonomies[0]->status . '" class="cat-confirm cat-quick-edit">Quick Edit</span>' . " | <span  class='cat-confirm delete-box id-" . $this->id . "'>Delete</span>";
         return "<span class='c-name'>" . $this->name . "</span>" . " (" . $this->termTaxonomies[0]->count . ") is " . $status . "<br>" . $action;
     }
 
-    public function dataPageCategoryStore() {
+    public function dataPageCategoryStore()
+    {
         $data = array(
             'id' => 'pagecategory-grid',
             'type' => 'bordered',
@@ -389,7 +413,8 @@ class Term extends CActiveRecord {
         return $data;
     }
 
-    public function findTermTaxonomyNameByid($id) {
+    public function findTermTaxonomyNameByid($id)
+    {
         return TermTaxonomy::model()->findByPk($id)->term->name;
     }
 

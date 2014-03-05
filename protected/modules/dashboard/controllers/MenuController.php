@@ -16,7 +16,6 @@ class MenuController extends AdminController
         Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/themes/dashboard/dark/js/plugins/nestable/jquery.nestable.js', CClientScript::POS_END);
 
         Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/themes/dashboard/dark/js/app/MenuController.js', CClientScript::POS_END);
-        Yii::app()->clientScript->registerScript('MenuController', "MenuController.init();", CClientScript::POS_READY);
 
         Yii::app()->CInfo->setTrue_save_info('Menu');
         Yii::app()->CInfo->setFalse_save_info('Menu');
@@ -45,6 +44,7 @@ class MenuController extends AdminController
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
         );
+
     }
 
     /**
@@ -71,6 +71,61 @@ class MenuController extends AdminController
 //                'users' => array('*'),
 //            ),
         );
+    }
+
+    /**
+     * Lists all models.
+     */
+    public function actionIndex()
+    {
+        Yii::app()->clientScript->registerScript('MenuParentDeleteUrl', 'var ParentMenuActionDelete = "' . Yii::app()->createUrl("dashboard/menu/parentdelete") . '";', CClientScript::POS_HEAD);
+        Yii::app()->clientScript->registerScript('MenuIndex', "
+            MenuController.initDeleteParentMenu();
+            MenuController.initMenuActive();
+        ", CClientScript::POS_READY);
+        $this->initJsIndexGeneret();
+        $model = new Term;
+        $model->unsetAttributes();
+        if (isset($_GET['Term']))
+            $model->attributes = $_GET['Term'];
+
+        $this->render('index', array(
+            'navmenu' => $model,
+        ));
+    }
+
+
+    public function actionCreate()
+    {
+        $model = new Term();
+        $this->performAjaxValidation($model);
+        if (isset($_POST['Term'])) {
+            $model->attributes = $_POST['Term'];
+            $model->termTaxonomies = array(
+                array(
+                    'type' => 'nav_menu',
+                    'parent' => 0,
+                    'description' => $_POST['Term']['description'],
+                    'status' => $_POST['Term']['status']
+                )
+            );
+            if ($model->saveWithRelated('termTaxonomies')) {
+                echo CJSON::encode(
+                    array_merge(
+                        Yii::app()->CInfo->getTrue_save_info(),
+                        array(
+                            'id' => $model->termTaxonomies[0]->id,
+                            'name' => ucwords($model->name)
+                        )
+                    )
+                );
+                exit();
+            } else {
+                echo CJSON::encode(Yii::app()->CInfo->getFalse_save_info());
+                exit();
+            }
+        } else
+            throw new CHttpException(404, 'The requested pages does not exist.');
     }
 
     /**
@@ -152,6 +207,23 @@ class MenuController extends AdminController
             echo CJSON::encode(Yii::app()->CInfo->getFalse_save_info());
     }
 
+    public function actionParentDelete($id)
+    {
+        $cat_id = $this->loadTermModel($id)->termTaxonomies[0]->id;
+        $this->loadTermModel($id)->delete();
+        echo CJSON::encode(array_merge(Yii::app()->CInfo->getTrue_delete_info(), array('cat_id' => $cat_id)));
+
+    }
+
+
+    public function loadTermModel($id)
+    {
+        $model = Term::model()->findByPk($id);
+        if ($model === null)
+            throw new CHttpException(404, 'The requested pages does not exist.');
+        return $model;
+    }
+
     protected function loadNavMenuTaxonomy($id)
     {
         $model = NavMenuTaxonomy::model()->findByPk($id);
@@ -160,28 +232,6 @@ class MenuController extends AdminController
         return $model;
     }
 
-    /**
-     * Creates a new model.
-     * If creation is successful, the browser will be redirected to the 'view' pages.
-     */
-    public function actionCreate()
-    {
-        $model = new NavMenu;
-
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['NavMenu'])) {
-            $model->attributes = $_POST['NavMenu'];
-            if ($model->save())
-                echo json_encode(array('data' => true));
-//                $this->redirect(array('view', 'id' => $model->id));
-        }
-
-        $this->render('create', array(
-            'model' => $model,
-        ));
-    }
 
     /**
      * Updates a particular model.
@@ -221,12 +271,13 @@ class MenuController extends AdminController
     public function actionSelect($id)
     {
         $this->initJsIndexGeneret();
+        Yii::app()->clientScript->registerScript('MenuController', "MenuController.init();", CClientScript::POS_READY);
         $model = new NavMenu('search');
         $model->unsetAttributes();
         $navmenu = new NavMenu();
 
 
-        $term = $this->loadTermModel($id);
+        $term = $this->loadTermTaxonomyModel($id);
         if (isset($_GET['NavMenu']))
             $model->attributes = $_GET['NavMenu'];
 
@@ -238,28 +289,6 @@ class MenuController extends AdminController
 
     }
 
-
-    /**
-     * Lists all models.
-     */
-    public function actionIndex()
-    {
-        $navmenu = new Term();
-        $navmenu->unsetAttributes();
-        $term = new TermTaxonomy();
-        if (isset($_GET['NavMenu']))
-            $model->attributes = $_GET['NavMenu'];
-
-        $this->render('index', array(
-            'navmenu' => $navmenu,
-        ));
-//        $dataProvider = new CActiveDataProvider('NavMenu');
-//        $navmenu = new NavMenu;
-//        $this->render('index', array(
-//            'dataProvider' => $dataProvider,
-//            'navmenu' => $navmenu
-//        ));
-    }
 
     /**
      * Manages all models.
@@ -276,7 +305,7 @@ class MenuController extends AdminController
         ));
     }
 
-    public function loadTermModel($term_id)
+    public function loadTermTaxonomyModel($term_id)
     {
         $model = TermTaxonomy::model()->findByPk($term_id);
         if ($model === null)
@@ -312,8 +341,33 @@ class MenuController extends AdminController
 
     private function initJsIndexGeneret()
     {
-        Yii::app()->clientScript->registerScript('menu-delete', '$(".delete-box").live("click", function(e) { var id = $(this).attr("id"); $.msgbox("Are you sure that you want to permanently delete the selected element?", {type: "confirm", buttons: [{type: "submit", value: "Yes"}, {type: "submit", value: "No"}]}, function(result) { if (result === "Yes") { $.ajax({url: "' . Yii::app()->createUrl("dashboard/menu/delete") . '", data: {id:id}, dataType: "JSON", type: "POST"}).done(function(response) { $.msgGrowl({type: response.type, title: response.title, text: response.text}); $.fn.yiiGridView.update("menu-grid"); $("#drop-menu-list option[value=\'" + response.cat_id +"\']").remove(); }); } }); });', CClientScript::POS_READY);
-        Yii::app()->clientScript->registerScript('form-menu-quikupdate', '$("span.cat-quick-edit").live("click", function(e){ $(this).parent().parent().children().css("display","none");$(this).parent().parent().prepend(\'<td colspan="3" class="form-edit" ><div class="row-fluid"><h4>Quick Edit</h4><form method="POST" class="form-menu" action="' . Yii::app()->createUrl('dashboard/menu/quikupdate', array('id' => '')) . '/\'+ $(this).attr("id") +\'"> <div class="control-group"><div class="controls"><input type="text" name="NavMenu[name]" value="\'+  $(this).attr("name") +\'" class="span12" placeholder="Name" required></div></div><div class="control-group"><div class="controls"><input type="text" name="NavMenu[slug]" value="\'+ $(this).attr("slug") +\'" class="span12" placeholder="Slug" required><input type="hidden" name="NavMenu[parent]" value="\'+ $(this).attr("parent") +\'" ><input type="hidden" name="NavMenu[status]" value="\'+ $(this).attr("status") +\'"></div></div><button type="button" class="cancel btn btn-small pull-left">Cencel</button> <button type="submit" class="update btn btn-small pull-right">Update Category</button></form></div></td>\');  });$("button.cancel").live("click", function() {$(this).parent().parent().parent().parent().children().css("display", ""); $(this).parent().parent().parent().remove(); }); $(".form-menu").live("submit", function() { $.ajax({url: $(this).attr("action"), data: $(this).serialize(), dataType: "JSON", type: "POST"}).done(function(response) { if (response.data === true) {$.msgGrowl({type: response.type, title: response.title, text: response.text}); $.fn.yiiGridView.update("menu-grid"); } else {$.msgGrowl({type: response.type, title: response.title, text: response.text}); } }); return false; });', CClientScript::POS_READY);
+//        Yii::app()->clientScript->registerScript('category-delete', '
+//        $(".delete-box").live("click", function(e) {
+//            var id = $(this).attr("data-id");
+//            $.msgbox("Are you sure that you want to permanently delete the selected element?",
+//                {
+//                    type: "confirm",
+//                    buttons: [{type: "submit", value: "Yes"}, {type: "submit", value: "No"}]
+//                }, function(result) {
+//                    if (result === "Yes") {
+//                        $.ajax({
+//                            url: "' . Yii::app()->createUrl("dashboard/menu/delete") . '",
+//                            data: {id: id[1]},
+//                            dataType: "JSON",
+//                            type: "POST"
+//                        }).done(
+//                            function(response) {
+//                                $.msgGrowl({
+//                                    type: response.type,
+//                                    title: response.title,
+//                                    text: response.text
+//                                });
+//                                $.fn.yiiGridView.update("category-grid");
+//                                $("#drop-category-list option[value=\'" + response.cat_id +"\']").remove();
+//                            }
+//                        );
+//                    } }); });', CClientScript::POS_READY);
+        Yii::app()->clientScript->registerScript('form-category-quikupdate', '$("span.cat-quick-edit").live("click", function(e){ $(this).parent().parent().children().css("display","none");$(this).parent().parent().prepend(\'<td colspan="3" class="form-edit" ><div class="row-fluid"><h4>Quick Edit</h4><form method="POST" class="form-cat" action="' . Yii::app()->createUrl('dashboard/category/quikupdate', array('id' => '')) . '/\'+ $(this).attr("id") +\'"> <div class="control-group"><div class="controls"><input type="text" name="Term[name]" value="\'+  $(this).attr("name") +\'" class="span12" placeholder="Name" required></div></div><div class="control-group"><div class="controls"><input type="text" name="Term[slug]" value="\'+ $(this).attr("slug") +\'" class="span12" placeholder="Slug" required><input type="hidden" name="Term[parent]" value="\'+ $(this).attr("parent") +\'" ><input type="hidden" name="Term[status]" value="\'+ $(this).attr("status") +\'"></div></div><button type="button" class="cancel btn btn-small pull-left">Cencel</button> <button type="submit" class="update btn btn-small pull-right">Update Category</button></form></div></td>\');  });$("button.cancel").live("click", function() {$(this).parent().parent().parent().parent().children().css("display", ""); $(this).parent().parent().parent().remove(); }); $(".form-cat").live("submit", function() { $.ajax({url: $(this).attr("action"), data: $(this).serialize(), dataType: "JSON", type: "POST"}).done(function(response) { if (response.data === true) {$.msgGrowl({type: response.type, title: response.title, text: response.text});$.fn.yiiGridView.update("category-grid"); } else {$.msgGrowl({type: response.type, title: response.title, text: response.text}); } });return false; });', CClientScript::POS_READY);
     }
 
     protected function runSave($save)
